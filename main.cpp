@@ -87,17 +87,17 @@ int main(int argc, const char *argv[]) {
 
     // Find a valid spawn point.
     auto map = world.GetMap();
-    auto transform = RandomChoice(map->GetRecommendedSpawnPoints(), rng);
+    auto transform = RandomChoice(map->GetRecommendedSpawnPoints(), rng); // TODO :: 선택으로 변경
+
+
 
     // Spawn the vehicle.
     auto actor = world.SpawnActor(blueprint, transform);
     std::cout << "Spawned " << actor->GetDisplayId() << '\n';
     auto vehicle = boost::static_pointer_cast<cc::Vehicle>(actor);
 
-    // Apply control to vehicle.
-    cc::Vehicle::Control control;
-    control.throttle = 1.0f;
-    vehicle->ApplyControl(control);
+    // Set autopilot
+    vehicle->SetAutopilot(true);
 
     // Move spectator so we can see the vehicle from the simulator window.
     auto spectator = world.GetSpectator();
@@ -107,7 +107,7 @@ int main(int argc, const char *argv[]) {
     transform.rotation.pitch = -15.0f;
     spectator->SetTransform(transform);
 
-    std::cout <<"hellowworld " << std::endl;
+
     // Find a camera blueprint.
     auto camera_bp = blueprint_library->Find("sensor.camera.semantic_segmentation");
     EXPECT_TRUE(camera_bp != nullptr);
@@ -120,8 +120,8 @@ int main(int argc, const char *argv[]) {
     auto camera = boost::static_pointer_cast<cc::Sensor>(cam_actor);
     std::cout << "test test" << std::endl;
 
-
-    std::this_thread::sleep_for(10s);
+    
+    std::this_thread::sleep_for(100s);
 
     // Remove actors from the simulation.
     camera->Destroy();
